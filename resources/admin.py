@@ -95,7 +95,7 @@ class AdminLogin(Resource):
             return {"message":"Error while logging in"},500
 
 class EditAdmindetails(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def post(self):
 
         try:
@@ -134,8 +134,7 @@ class EditAdmindetails(Resource):
             if data['anewpassword'] == None:
                 x=query(f"""SELECT * FROM ADMINS WHERE ausername = '{data["ausername"]}'""",return_json=False)
                 if len(x)>0:
-                    query(f"""UPDATE ADMINS SET
-                                                    aname='{data['aname']}',
+                    query(f"""UPDATE ADMINS SET aname='{data['aname']}',
                                                     adept='{data['adept']}',
                                                     aemail='{data['aemail']}',
                                                     aphone='{data['aphone']}'
@@ -163,7 +162,7 @@ class EditAdmindetails(Resource):
 
 
 class GetPendingNoOfPasses(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def get(self):
         try:
             parser = reqparse.RequestParser()
@@ -180,8 +179,8 @@ class GetPendingNoOfPasses(Resource):
             return {"message":"Error in fetching data"},500
 
 class GetPassesHistory(Resource):
-    @jwt_required
-    def get(self):
+   '''@jwt_required'''
+   def get(self):
         try:
             parser = reqparse.RequestParser()
 
@@ -198,7 +197,7 @@ class GetPassesHistory(Resource):
 
 
 class Studentdetails(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def get(self):
         parser = reqparse.RequestParser()
 
@@ -212,7 +211,7 @@ class Studentdetails(Resource):
             return {"message":"srollno doesn't exist"},500
 
 class SetOutpassesleft(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def post(self):
         try:
             parser = reqparse.RequestParser()

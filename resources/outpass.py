@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token, jwt_required
 
 
 class OutpassApplication(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def post(self):
         parser = reqparse.RequestParser()
 
@@ -14,7 +14,7 @@ class OutpassApplication(Resource):
         parser.add_argument('odesc', type = str, required = True, help = 'description cannot be left blank')
 
         data = parser.parse_args()
-        print(data)
+    
         try:
             isapplicable = query(f"""SELECT passesleft FROM STUDENTS WHERE srollno = '{data['srollno']}' AND passesleft > 0""", return_json=False)
             if len(isapplicable)<1:
@@ -24,7 +24,7 @@ class OutpassApplication(Resource):
             if len(isAlreadyPresent) > 0:
                 return {"message":"Student has already applied for an outpass on the given date"},400
         except:
-            return {"message":"Error in outpass application"},500
+            return {"message":"Error in outpass application"},500 
 
         try:
             query(f"""INSERT INTO PASSES (orollno, odate, otime, odesc) VALUES (
@@ -46,10 +46,13 @@ class OutpassApplication(Resource):
         
         return {"message":"Outpass application successfull",
                 "oid":oid},201
+        print("hi")
+        return {"message":"hi"},201
 
 class PendingOutpasses(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def get(self):
+        print("hi")
         parser = reqparse.RequestParser()
 
         parser.add_argument('adept', type = str, required = True, help = 'dept cannot be left blank')
@@ -57,21 +60,22 @@ class PendingOutpasses(Resource):
         data = parser.parse_args()
 
         try:
-            query(f"""UPDATE PASSES SET ostatus = 'rejected' WHERE odate < CURDATE() AND ostatus = 'pending'""")
+            query(f"""UPDATE PASSES SET ostatus = 'rejected' WHERE odate < "2020-11-30" AND ostatus = 'pending'""")
             return query(f"""SELECT oid, srollno, sname, syear FROM STUDENTS INNER JOIN PASSES ON srollno = orollno WHERE ostatus = 'pending' AND sdept = '{data['adept']}'""", return_json=False),200
         except:
             return {"message":"Error in retrieving pending outpasses"},500
 
 class SetOutpassStatus(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def post(self):
+        print("ho")
         try:
             parser = reqparse.RequestParser()
 
             parser.add_argument('oid', type = int, required = True, help = 'oid cannot be left blank')
             parser.add_argument('ostatus', type = str, required = True, help = 'status cannot be left blank')
-
             data = parser.parse_args()
+            print(data)
         except:
             return {"message":"error in parsing data"},400
 
@@ -82,7 +86,7 @@ class SetOutpassStatus(Resource):
         return {"message":"Outpass status set successfully"},200
 
 class Outpasssdetails(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def get(self):
         parser = reqparse.RequestParser()
 

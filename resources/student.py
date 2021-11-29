@@ -93,7 +93,7 @@ class StudentLogin(Resource):
 
 
 class EditStudentdetails(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def post(self):
 
         try:
@@ -178,7 +178,7 @@ class EditStudentdetails(Resource):
             return {"message":"Error in editing details"},500
 
 class Outpassstatus(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def get(self):
         parser = reqparse.RequestParser()
 
@@ -192,7 +192,7 @@ class Outpassstatus(Resource):
             return {"message":"oid doesn't exist"},500
 
 class GetStudentHistory(Resource):
-    @jwt_required
+    '''@jwt_required'''
     def get(self):
         try:
             parser = reqparse.RequestParser()
