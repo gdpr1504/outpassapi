@@ -14,7 +14,7 @@ class OutpassApplication(Resource):
         parser.add_argument('odesc', type = str, required = True, help = 'description cannot be left blank')
 
         data = parser.parse_args()
-    
+        print(data)
         try:
             isapplicable = query(f"""SELECT passesleft FROM STUDENTS WHERE srollno = '{data['srollno']}' AND passesleft > 0""", return_json=False)
             if len(isapplicable)<1:

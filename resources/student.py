@@ -18,17 +18,17 @@ class StudentRegister(Resource):
         parser.add_argument('spgphone', type = str, required = True, help = 'Parent/Guardian email cannot be left blank')
 
         data = parser.parse_args()
-
+        print(data)
         try:
             isAlreadyPresent = query(f"""SELECT * FROM STUDENTS WHERE srollno = '{data['srollno']}'""", return_json = False)
             if len(isAlreadyPresent) > 0:
+                print("hi")
                 return {"message":"Student with given roll no already exists"},400
         except:
             return {"message":"Error inserting into STUDENTS"},500
 
         try:
-            bcrypt = Bcrypt()
-            spassword_hash = bcrypt.generate_password_hash(data['spassword']).decode('utf-8')
+            spassword_hash = data['spassword']
         except:
             return {"message":"Password hash not generated"},500
 
@@ -44,7 +44,7 @@ class StudentRegister(Resource):
                                                                                                                                 '{data['spgname']}',
                                                                                                                                 '{data['spgphone']}'
                                                                                                                                 )"""
-                                                                                                                                )
+                )
         except:
             return {"message":"Error inserting into STUDENTS"},500
         
@@ -79,7 +79,7 @@ class StudentLogin(Resource):
             
         try:
             studentuser = StudentUser.getStudentUserBySrollno(data['srollno'])
-            if studentuser and bcrypt.check_password_hash(studentuser.spassword, data['spassword']) :
+            if studentuser and studentuser.spassword==data['spassword'] :
                 access_token = create_access_token(identity=studentuser.srollno, expires_delta = False)
                 return {    "srollno":studentuser.srollno,
                             "sname":studentuser.sname,
@@ -117,7 +117,7 @@ class EditStudentdetails(Resource):
         try:
             bcrypt = Bcrypt()
             studentuser = StudentUser.getStudentUserBySrollno(data['srollno'])
-            if not(studentuser and bcrypt.check_password_hash(studentuser.spassword, data['soldpassword'])):
+            if not(studentuser and studentuser.spassword==data['soldpassword']):
                 return {"message":"Wrong password"}
         except:
             return {"message":"Error in editing details"},500
@@ -156,7 +156,7 @@ class EditStudentdetails(Resource):
                 except:
                     return{"message" : "Error in editing details1"},500
             else:
-                spassword_hash = bcrypt.generate_password_hash(data['snewpassword']).decode('utf-8')
+                spassword_hash = data['snewpassword']
             
 
             x=query(f"""SELECT * FROM STUDENTS WHERE srollno = '{data["srollno"]}'""",return_json=False)

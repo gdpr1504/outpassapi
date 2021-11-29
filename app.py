@@ -7,7 +7,7 @@ from resources.outpass import OutpassApplication, PendingOutpasses, SetOutpassSt
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS']=True
-app.config['JWT_SECRET_KEY']='coscskillup'
+app.config['JWT_SECRET_KEY']='kohlinani18'
 api = Api(app)
 jwt = JWTManager(app)
 
@@ -44,4 +44,4 @@ api.add_resource(GetStudentHistory, '/getstudenthistory')
 api.add_resource(SetOutpassesleft, '/setoutpassesleft')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

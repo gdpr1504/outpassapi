@@ -7,7 +7,7 @@ from resources.student import StudentUser
 
 class getall(Resource):
     def get(self):
-        return query(f"""SELECT ausername FROM ADMINS""")
+        return query(f"""SELECT * FROM ADMINS""")
 class AdminRegister(Resource):
     
     def post(self):
@@ -38,7 +38,7 @@ class AdminRegister(Resource):
 
         try:
             bcrypt = Bcrypt()
-            apassword_hash = bcrypt.generate_password_hash(data['apassword']).decode('utf-8')
+            apassword_hash = data['apassword']
         except:
             return {"message":"Password hash not generated"},500
 
@@ -83,7 +83,8 @@ class AdminLogin(Resource):
             
         try:
             adminuser = AdminUser.getAdminUserByAusername(data['ausername'])
-            if adminuser and bcrypt.check_password_hash(adminuser.apassword, data['apassword']) :
+            if adminuser and adminuser.apassword==data['apassword'] :
+                print("hi")
                 access_token = create_access_token(identity=adminuser.ausername, expires_delta = False)
                 return {    "ausername":adminuser.ausername,
                             "aname":adminuser.aname,
@@ -115,7 +116,7 @@ class EditAdmindetails(Resource):
         try:
             bcrypt = Bcrypt()
             adminuser = AdminUser.getAdminUserByAusername(data['ausername'])
-            if not(adminuser and bcrypt.check_password_hash(adminuser.apassword, data['aoldpassword'])):
+            if not(adminuser and adminuser.apassword== data['aoldpassword']):
                 return {"message":"Wrong password"}
         except:
             return {"message":"Error in editing details"},500
@@ -142,7 +143,7 @@ class EditAdmindetails(Resource):
                     return {"message" : "Details are edited successfully!"},200
                 return {"message" : "Srollno doesn't exist"},400
             else:
-                apassword_hash = bcrypt.generate_password_hash(data['anewpassword']).decode('utf-8')
+                apassword_hash = data['anewpassword']
 
 
             x=query(f"""SELECT * FROM ADMINS WHERE ausername = '{data["ausername"]}'""",return_json=False)
