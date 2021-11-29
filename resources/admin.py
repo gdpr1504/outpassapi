@@ -4,7 +4,12 @@ from flask_jwt_extended import create_access_token, jwt_required
 from flask_bcrypt import Bcrypt
 from resources.student import StudentUser
 
+
+class getall(Resource):
+    def get(self):
+        return query(f"""SELECT ausername FROM ADMINS""")
 class AdminRegister(Resource):
+    
     def post(self):
         parser = reqparse.RequestParser()
 

@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from resources.student import StudentRegister, StudentLogin, EditStudentdetails, Outpassstatus, GetStudentHistory
-from resources.admin import AdminRegister, AdminLogin, EditAdmindetails, GetPendingNoOfPasses, GetPassesHistory, Studentdetails, SetOutpassesleft
+from resources.admin import getall, AdminRegister, AdminLogin, EditAdmindetails, GetPendingNoOfPasses, GetPassesHistory, Studentdetails, SetOutpassesleft
 from resources.outpass import OutpassApplication, PendingOutpasses, SetOutpassStatus, Outpasssdetails
 
 app = Flask(__name__)
@@ -25,6 +25,7 @@ def invalid_token_callback(error):
         "description":"Signature verification failed"
     }), 401
 
+api.add_resource(getall,'/getall')
 api.add_resource(StudentRegister, '/studentregister')
 api.add_resource(AdminRegister, '/adminregister')
 api.add_resource(StudentLogin, '/studentlogin')
